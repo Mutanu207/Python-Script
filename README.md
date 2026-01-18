@@ -17,4 +17,5 @@ Since its a free model i cant use alot of tokens hence there are alot if limitat
 - `huggingface_hub` Python package
 - `python-dotenv` for managing API tokens
 
-
+#New things Added
+- i added abstraction to have backup models using litellm
