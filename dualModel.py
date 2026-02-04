@@ -7,19 +7,15 @@ from litellm import completion #using litellm for abstraction
 load_dotenv()
 #creating the handshake between hugging face and my system to be able to use the models and send requests
 client=InferenceClient(token=os.getenv("HF_TOKEN"))
-PRIMARYMODEL_ID="huggingface/MiniMaxAI/MiniMax-M2.1"
-BACKUP_MODELS=["huggingface/google/flan-t5-large"]  #Adding backup models if the main one fails
+MODEL_ID="MiniMaxAI/MiniMax-M2.1"
 def generate_text(prompt):#creating a function that when called will execute the code block inside the function
     print("Please wait as we generate the answer...")
     try:
-        output= completion(
-                model=PRIMARYMODEL_ID,
+        output= client.chat.completions.create(
+                model=MODEL_ID,
                 max_tokens=500,
                 temperature=0.3,
-                fallbacks=BACKUP_MODELS,
                 messages=[ {"role": "user", "content": prompt}, {"role": "system", "content": "You are a helpful assistant."}])
-        model_used=output.model
-        print(f"Answered from this model:{model_used}")
         return(output.choices[0].message["content"]) #returning the generated text after stripping any leading or trailing whitespace
     except Exception:
         print(f"An error occurred: {traceback.format_exc()}")
